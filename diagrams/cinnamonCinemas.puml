@@ -9,7 +9,7 @@ class Theatre {
     + GetSeats() : List<Seat>
 
     + GetAvailableSeatsCount() : int
-    + AllocateSeats(number : int) : boolean
+    + AllocateSeats(number : int) : List<Seat>
 }
 
 class Seat {

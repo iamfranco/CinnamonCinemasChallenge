@@ -27,15 +27,17 @@ public class Theatre
 
     public int GetAvailableSeatsCount() => _seats.Count(seat => seat.Status is Status.Available);
 
-    public void AllocateSeats(int numberOfSeats)
+    public ReadOnlyCollection<Seat>? AllocateSeats(int numberOfSeats)
     {
         int availableSeatsCount = GetAvailableSeatsCount();
         if (availableSeatsCount < numberOfSeats)
-            throw new ArgumentOutOfRangeException($"{nameof(numberOfSeats)} ({numberOfSeats}) exceed number of available seats ({availableSeatsCount})");
+            return null;
 
         List<Seat> seatsToAllocate = _seats.Where(seat => seat.Status is Status.Available)
                                            .Take(numberOfSeats).ToList();
 
         seatsToAllocate.ForEach(seat => seat.Allocate());
+
+        return seatsToAllocate.AsReadOnly();
     }
 }

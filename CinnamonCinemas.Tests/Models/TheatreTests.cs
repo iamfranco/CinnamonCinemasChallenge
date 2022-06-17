@@ -81,6 +81,15 @@ internal class TheatreTests
     }
 
     [Test]
+    public void AllocateSeats_With_3_Should_Return_List_Of_3_Allocated_Seats()
+    {
+        ReadOnlyCollection<Seat> allocatedSeats = theatre.AllocateSeats(3);
+        ReadOnlyCollection<Seat> expectedSeats = theatre.Seats.Take(3).ToList().AsReadOnly();
+
+        allocatedSeats.Should().BeEquivalentTo(expectedSeats);
+    }
+
+    [Test]
     public void AllocateSeats_With_3_Then_GetAvailableSeatsCount_Should_Return_12()
     {
         theatre.AllocateSeats(3);
@@ -89,6 +98,17 @@ internal class TheatreTests
         int actualResult = theatre.GetAvailableSeatsCount();
 
         actualResult.Should().Be(expectedResult);
+    }
+
+    [Test]
+    public void AllocateSeats_With_3_2_Should_Return_List_Of_Recent_2_Allocated_Seats()
+    {
+        theatre.AllocateSeats(3);
+
+        ReadOnlyCollection<Seat> allocatedSeats = theatre.AllocateSeats(2);
+        ReadOnlyCollection<Seat> expectedSeats = theatre.Seats.Skip(3).Take(2).ToList().AsReadOnly();
+
+        allocatedSeats.Should().BeEquivalentTo(expectedSeats);
     }
 
     [Test]
@@ -105,22 +125,20 @@ internal class TheatreTests
     }
 
     [Test]
-    public void AllocateSeats_With_15_1_Should_Throw_Exception()
+    public void AllocateSeats_With_15_1_Should_Return_Null()
     {
         theatre.AllocateSeats(15);
 
-        Action act = () => theatre.AllocateSeats(1);
-
-        act.Should().Throw<ArgumentOutOfRangeException>();
+        var allocatedSeats = theatre.AllocateSeats(1);
+        allocatedSeats.Should().BeNull();
     }
 
     [Test]
-    public void AllocateSeats_With_14_2_Should_Throw_Exception()
+    public void AllocateSeats_With_14_2_Should_Return_Null()
     {
         theatre.AllocateSeats(14);
 
-        Action act = () => theatre.AllocateSeats(2);
-
-        act.Should().Throw<ArgumentOutOfRangeException>();
+        var allocatedSeats = theatre.AllocateSeats(2);
+        allocatedSeats.Should().BeNull();
     }
 }

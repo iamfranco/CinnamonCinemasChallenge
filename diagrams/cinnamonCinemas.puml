@@ -8,8 +8,8 @@ class Theatre {
 
     + GetSeats() : List<Seat>
 
-    + GetAvailableSeatCounts() : int
-    + AllocateSeat(number : int) : boolean
+    + GetAvailableSeatsCount() : int
+    + AllocateSeats(number : int) : boolean
 }
 
 class Seat <<struct>> {

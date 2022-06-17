@@ -6,6 +6,12 @@ public class Seat
 
     public Seat(string seatNumber)
     {
+        if (seatNumber is null)
+            throw new ArgumentNullException(nameof(seatNumber));
+
+        if (seatNumber == String.Empty)
+            throw new ArgumentException($"{nameof(seatNumber)} cannot be empty string");
+
         SeatNumber = seatNumber;
         Status = Status.Available;
     }

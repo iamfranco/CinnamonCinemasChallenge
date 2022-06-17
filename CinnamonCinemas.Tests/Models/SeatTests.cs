@@ -12,6 +12,20 @@ internal class SeatTests
     }
 
     [Test]
+    public void Construct_With_Null_SeatNumber_Should_Throw_Exception()
+    {
+        Action act = () => seat = new(null);
+        act.Should().Throw<ArgumentNullException>();
+    }
+
+    [Test]
+    public void Construct_With_Empty_String_SeatNumber_Should_Throw_Exception()
+    {
+        Action act = () => seat = new("");
+        act.Should().Throw<ArgumentException>();
+    }
+
+    [Test]
     public void Status_Should_Return_Available_By_Default()
     {
         seat.Status.Should().Be(Status.Available);

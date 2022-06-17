@@ -1,0 +1,35 @@
+@startuml "cinnamon cinemas"
+skinparam ClassAttributeIconSize 0
+
+class Theater {
+    - seats : List<Seat>
+
+    + Theater(rowLetters : string, columnNumbers : List<int>)
+
+    + GetSeats() : List<Seat>
+
+    + GetAvailableSeatCounts() : int
+    + AllocateSeat(number : int) : boolean
+}
+
+class Seat <<struct>> {
+    - status : Status
+    - seatNumber : string
+
+    + Seat(seatNumber : string)
+
+    + GetStatus() : Status
+    + GetSeatNumber() : string
+
+    + allocate() : void
+}
+
+Enum Status {
+    available
+    allocated
+}
+
+Theater o-- Seat
+Seat o-- Status
+
+@enduml

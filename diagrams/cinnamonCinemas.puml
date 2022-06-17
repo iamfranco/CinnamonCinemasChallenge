@@ -1,18 +1,18 @@
 @startuml "cinnamon cinemas"
 skinparam ClassAttributeIconSize 0
 
-class Theater {
+class Theatre {
     - seats : List<Seat>
 
-    + Theater(rowLetters : string, columnNumbers : List<int>)
+    + Theatre(rowLetters : List<string>, columnNumbers : List<int>)
 
     + GetSeats() : List<Seat>
 
-    + GetAvailableSeatCounts() : int
-    + AllocateSeat(number : int) : boolean
+    + GetAvailableSeatsCount() : int
+    + AllocateSeats(number : int) : boolean
 }
 
-class Seat <<struct>> {
+class Seat {
     - status : Status
     - seatNumber : string
 
@@ -21,15 +21,15 @@ class Seat <<struct>> {
     + GetStatus() : Status
     + GetSeatNumber() : string
 
-    + allocate() : void
+    + Allocate() : void
 }
 
 Enum Status {
-    available
-    allocated
+    Available
+    Allocated
 }
 
-Theater o-- Seat
+Theatre o-- Seat
 Seat o-- Status
 
 @enduml

@@ -1,4 +1,5 @@
 ﻿using CinnamonCinemas.Models;
+using System.Collections.ObjectModel;
 
 namespace CinnamonCinemas.Tests.Models;
 internal class TheatreTests
@@ -50,4 +51,20 @@ internal class TheatreTests
         act.Should().Throw<ArgumentException>();
     }
 
+
+    [Test]
+    public void Seats_Should_Return_List_Of_Seats_Correspond_To_Constructor_RowLetters_ColumnNumbers_Initially()
+    {
+        rowLetters = new() { "A", "B", "C" };
+        columnNumbers = new() { 1, 2, 3, 4, 5 };
+        theatre = new Theatre(rowLetters, columnNumbers);
+
+        ReadOnlyCollection<Seat> expectedResult = rowLetters.SelectMany(
+            _ => columnNumbers,
+            (row, column) => new Seat($"{row}{column}")).ToList().AsReadOnly();
+
+        ReadOnlyCollection<Seat> actualResult = theatre.Seats;
+
+        actualResult.Should().Equal(expectedResult);
+    }
 }

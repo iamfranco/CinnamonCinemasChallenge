@@ -1,6 +1,11 @@
-﻿namespace CinnamonCinemas.Models;
+﻿using System.Collections.ObjectModel;
+
+namespace CinnamonCinemas.Models;
 public class Theatre
 {
+    private readonly List<Seat> _seats;
+    public ReadOnlyCollection<Seat> Seats => _seats.AsReadOnly();
+
     public Theatre(List<string> rowLetters, List<int> columnNumbers)
     {
         if (rowLetters is null) 
@@ -14,5 +19,9 @@ public class Theatre
 
         if (columnNumbers.Count == 0)
             throw new ArgumentException($"{nameof(columnNumbers)} cannot be empty");
+
+        _seats = rowLetters.SelectMany(
+            _ => columnNumbers,
+            (row, column) => new Seat($"{row}{column}")).ToList();
     }
 }

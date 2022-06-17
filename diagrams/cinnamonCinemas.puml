@@ -1,10 +1,10 @@
 @startuml "cinnamon cinemas"
 skinparam ClassAttributeIconSize 0
 
-class Theater {
+class Theatre {
     - seats : List<Seat>
 
-    + Theater(rowLetters : string, columnNumbers : List<int>)
+    + Theatre(rowLetters : List<string>, columnNumbers : List<int>)
 
     + GetSeats() : List<Seat>
 
@@ -29,7 +29,7 @@ Enum Status {
     allocated
 }
 
-Theater o-- Seat
+Theatre o-- Seat
 Seat o-- Status
 
 @enduml

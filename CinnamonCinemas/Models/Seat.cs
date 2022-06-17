@@ -1,5 +1,5 @@
 ﻿namespace CinnamonCinemas.Models;
-public struct Seat
+public class Seat
 {
     public string SeatNumber { get; }
     public Status Status { get; private set; }

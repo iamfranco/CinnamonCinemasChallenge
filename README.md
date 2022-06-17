@@ -21,3 +21,7 @@ To run the application:
 ```c#
 dotnet run
 ```
+
+# UML Diagram
+
+![UML Diagram](diagrams/cinnamon%20cinemas.png)

@@ -12,7 +12,7 @@ class Theatre {
     + AllocateSeats(number : int) : boolean
 }
 
-class Seat <<struct>> {
+class Seat {
     - status : Status
     - seatNumber : string
 
@@ -21,12 +21,12 @@ class Seat <<struct>> {
     + GetStatus() : Status
     + GetSeatNumber() : string
 
-    + allocate() : void
+    + Allocate() : void
 }
 
 Enum Status {
-    available
-    allocated
+    Available
+    Allocated
 }
 
 Theatre o-- Seat

@@ -1,6 +1,6 @@
-﻿using CinnamonCinemas.Models;
+﻿using CinnamonCinemas.Models.Seats;
 
-namespace CinnamonCinemas.Tests.Models;
+namespace CinnamonCinemas.Tests.Models.Seats;
 internal class SeatTests
 {
     Seat seat;
@@ -28,7 +28,7 @@ internal class SeatTests
     [Test]
     public void Status_Should_Return_Available_By_Default()
     {
-        seat.Status.Should().Be(Status.Available);
+        seat.Status.Should().Be(SeatStatus.Available);
     }
 
     [Test]
@@ -44,7 +44,7 @@ internal class SeatTests
     {
         seat.Allocate();
 
-        seat.Status.Should().Be(Status.Allocated);
+        seat.Status.Should().Be(SeatStatus.Allocated);
     }
 
     [Test]

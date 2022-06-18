@@ -1,5 +1,5 @@
 ﻿namespace CinnamonCinemas.Models.SeatNumberGenerators;
-public class SeatNumberGenerator
+public class SeatNumberGenerator : ISeatNumberGenerator
 {
     private string _alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 

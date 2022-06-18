@@ -1,5 +1,6 @@
 ﻿using CinnamonCinemas.Models;
 using CinnamonCinemas.Models.SeatNumberGenerators;
+using CinnamonCinemas.Models.Seats;
 using System.Collections.ObjectModel;
 
 namespace CinnamonCinemas.Tests.Models;
@@ -8,7 +9,7 @@ internal class TheatreTests
     Theatre theatre;
     int rowCount;
     int columnCount;
-    SeatNumberGenerator seatNumberGenerator;
+    ISeatNumberGenerator seatNumberGenerator;
 
     [SetUp]
     public void Setup()

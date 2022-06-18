@@ -1,4 +1,5 @@
 ﻿using CinnamonCinemas.Models.SeatNumberGenerators;
+using CinnamonCinemas.Models.Seats;
 using System.Collections.ObjectModel;
 
 namespace CinnamonCinemas.Models;
@@ -10,7 +11,7 @@ public class Theatre
     public int RowCount { get; }
     public int ColumnCount { get; }
 
-    public Theatre(int rowCount, int columnCount, SeatNumberGenerator seatNumberGenerator)
+    public Theatre(int rowCount, int columnCount, ISeatNumberGenerator seatNumberGenerator)
     {
         if (rowCount <= 0)
             throw new ArgumentOutOfRangeException(nameof(rowCount));
@@ -36,7 +37,7 @@ public class Theatre
         ColumnCount = columnCount;
     }
 
-    public int GetAvailableSeatsCount() => _seats.Count(seat => seat.Status is Status.Available);
+    public int GetAvailableSeatsCount() => _seats.Count(seat => seat.Status is SeatStatus.Available);
 
     public ReadOnlyCollection<Seat>? AllocateSeats(int numberOfSeats)
     {
@@ -44,7 +45,7 @@ public class Theatre
         if (availableSeatsCount < numberOfSeats)
             return null;
 
-        List<Seat> seatsToAllocate = _seats.Where(seat => seat.Status is Status.Available)
+        List<Seat> seatsToAllocate = _seats.Where(seat => seat.Status is SeatStatus.Available)
                                            .Take(numberOfSeats).ToList();
 
         seatsToAllocate.ForEach(seat => seat.Allocate());

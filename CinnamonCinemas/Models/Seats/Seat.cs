@@ -2,7 +2,7 @@
 public class Seat
 {
     public string SeatNumber { get; }
-    public Status Status { get; private set; }
+    public SeatStatus Status { get; private set; }
 
     public Seat(string seatNumber)
     {
@@ -13,14 +13,14 @@ public class Seat
             throw new ArgumentException($"{nameof(seatNumber)} cannot be empty string");
 
         SeatNumber = seatNumber;
-        Status = Status.Available;
+        Status = SeatStatus.Available;
     }
 
     public void Allocate()
     {
-        if (Status is Status.Allocated)
+        if (Status is SeatStatus.Allocated)
             throw new InvalidOperationException($"Seat {SeatNumber} is already allocated");
 
-        Status = Status.Allocated;
+        Status = SeatStatus.Allocated;
     }
 }

@@ -1,5 +1,5 @@
 ﻿namespace CinnamonCinemas.Models.Seats;
-public enum Status
+public enum SeatStatus
 {
     Available,
     Allocated

@@ -3,7 +3,7 @@ skinparam ClassAttributeIconSize 0
 
 class TheatrePrinter {
     + Print(theatre : Theatre) : void
-    + Print(theatre : Theatre, recentlyAllocatedSeats : List<ISeat>) : void
+    + Print(theatre : Theatre, recentlyAllocatedSeats : List<Seat>) : void
 }
 
 interface ISeatNumberGenerator {
@@ -17,7 +17,7 @@ class SeatNumberGenerator {
 class Theatre {
     - rowCount : int
     - columnCount : int
-    - seats : List<ISeat>
+    - seats : List<Seat>
 
     + Theatre(\n\
         rowCount : int, \n\
@@ -26,16 +26,10 @@ class Theatre {
 
     + GetRowCount() : int
     + GetColumnCount() : int
-    + GetSeats() : List<ISeat>
+    + GetSeats() : List<Seat>
 
     + GetAvailableSeatsCount() : int
-    + AllocateSeats(number : int) : List<ISeat>
-}
-
-interface ISeat {
-    + GetStatus() : Status
-    + GetSeatNumber() : string
-    + Allocate() : void
+    + AllocateSeats(number : int) : List<Seat>
 }
 
 class Seat {
@@ -55,15 +49,13 @@ Enum Status {
 }
 
 TheatrePrinter --> Theatre
-TheatrePrinter ---> ISeat
+TheatrePrinter ---> Seat
 
-Theatre o-- ISeat
+Theatre o-- Seat
 Theatre --> ISeatNumberGenerator
 
 ISeatNumberGenerator <|.. SeatNumberGenerator
 
-ISeat --> Status
-
-ISeat <|-- Seat
+Seat --> Status
 
 @enduml

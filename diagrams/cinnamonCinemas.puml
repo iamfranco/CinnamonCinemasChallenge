@@ -33,17 +33,17 @@ class Theatre {
 }
 
 class Seat {
-    - status : Status
+    - status : SeatStatus
     - seatNumber : string
 
     + Seat(seatNumber : string)
 
-    + GetStatus() : Status
+    + GetStatus() : SeatStatus
     + GetSeatNumber() : string
     + Allocate() : void
 }
 
-Enum Status {
+Enum SeatStatus {
     Available
     Allocated
 }
@@ -56,6 +56,6 @@ Theatre --> ISeatNumberGenerator
 
 ISeatNumberGenerator <|.. SeatNumberGenerator
 
-Seat --> Status
+Seat o-- SeatStatus
 
 @enduml

@@ -3,8 +3,11 @@ skinparam ClassAttributeIconSize 0
 
 class TheatrePrinter {
     + Print(theatre : Theatre) : void
-    + Print(theatre : Theatre, \n\
-        recentlyAllocatedSeats : List<Seat>) : void
+    
+    + Print(\n\
+        theatre : Theatre, \n\
+        recentlyAllocatedSeats : List<Seat>\n\
+    ) : void
 }
 
 interface ISeatNumberGenerator {
@@ -28,7 +31,8 @@ class CinemasController {
         rowCount : int, \n\
         columnCount : int, \n\
         theatreInfo : string, \n\
-        seatNumberGenerator : ISeatNumberGenerator)
+        seatNumberGenerator : ISeatNumberGenerator\n\
+    ) : void
 
     + SelectTheatre(theatre : Theatre) : void
 

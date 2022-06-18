@@ -6,11 +6,11 @@ class TheatrePrinter {
 }
 
 interface ISeatNumberGenerator {
-    + GenerateSeatNumber(rowCount : int, columnCount : int) : string
+    + GenerateSeatNumber(rowNumber : int, columnNumber : int) : string
 }
 
 class SeatNumberGenerator {
-    + GenerateSeatNumber(rowCount : int, columnCount : int) : string
+    + GenerateSeatNumber(rowNumber : int, columnNumber : int) : string
 }
 
 class Theatre {

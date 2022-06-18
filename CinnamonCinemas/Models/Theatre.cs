@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using CinnamonCinemas.Models.SeatNumberGenerators;
+using System.Collections.ObjectModel;
 
 namespace CinnamonCinemas.Models;
 public class Theatre
@@ -6,36 +7,48 @@ public class Theatre
     private List<Seat> _seats;
     public ReadOnlyCollection<Seat> Seats => _seats.AsReadOnly();
 
-    public Theatre(List<string> rowLetters, List<int> columnNumbers)
+    public int RowCount { get; }
+    public int ColumnCount { get; }
+
+    public Theatre(int rowCount, int columnCount, SeatNumberGenerator seatNumberGenerator)
     {
-        if (rowLetters is null)
-            throw new ArgumentNullException(nameof(rowLetters));
+        if (rowCount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(rowCount));
 
-        if (rowLetters.Count == 0)
-            throw new ArgumentException($"{nameof(rowLetters)} cannot be empty");
+        if (columnCount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(columnCount));
 
-        if (columnNumbers is null)
-            throw new ArgumentNullException(nameof(columnNumbers));
+        if (seatNumberGenerator is null)
+            throw new ArgumentNullException(nameof(seatNumberGenerator));
 
-        if (columnNumbers.Count == 0)
-            throw new ArgumentException($"{nameof(columnNumbers)} cannot be empty");
+        _seats = new();
 
-        _seats = rowLetters.SelectMany(
-            _ => columnNumbers,
-            (row, column) => new Seat($"{row}{column}")).ToList();
+        for (int rowNumber = 1; rowNumber <= rowCount; rowNumber++)
+        {
+            for (int columnNumber = 1; columnNumber <= columnCount; columnNumber++)
+            {
+                string seatNumber = seatNumberGenerator.GenerateSeatNumber(rowNumber, columnNumber);
+                _seats.Add(new Seat(seatNumber));
+            }
+        }
+
+        RowCount = rowCount;
+        ColumnCount = columnCount;
     }
 
     public int GetAvailableSeatsCount() => _seats.Count(seat => seat.Status is Status.Available);
 
-    public void AllocateSeats(int numberOfSeats)
+    public ReadOnlyCollection<Seat>? AllocateSeats(int numberOfSeats)
     {
         int availableSeatsCount = GetAvailableSeatsCount();
         if (availableSeatsCount < numberOfSeats)
-            throw new ArgumentOutOfRangeException($"{nameof(numberOfSeats)} ({numberOfSeats}) exceed number of available seats ({availableSeatsCount})");
+            return null;
 
         List<Seat> seatsToAllocate = _seats.Where(seat => seat.Status is Status.Available)
                                            .Take(numberOfSeats).ToList();
 
         seatsToAllocate.ForEach(seat => seat.Allocate());
+
+        return seatsToAllocate.AsReadOnly();
     }
 }

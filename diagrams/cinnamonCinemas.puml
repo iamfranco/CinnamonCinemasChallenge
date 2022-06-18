@@ -1,15 +1,41 @@
 @startuml "cinnamon cinemas"
 skinparam ClassAttributeIconSize 0
 
+class TheatrePrinter {
+    + Print(theatre : Theatre) : void
+    + Print(theatre : Theatre, recentlyAllocatedSeats : List<ISeat>) : void
+}
+
+interface ISeatNumberGenerator {
+    + GenerateSeatNumber(rowNumber : int, columnNumber : int) : string
+}
+
+class SeatNumberGenerator {
+    + GenerateSeatNumber(rowNumber : int, columnNumber : int) : string
+}
+
 class Theatre {
-    - seats : List<Seat>
+    - rowCount : int
+    - columnCount : int
+    - seats : List<ISeat>
 
-    + Theatre(rowLetters : List<string>, columnNumbers : List<int>)
+    + Theatre(\n\
+        rowCount : int, \n\
+        columnCount : int, \n\
+        seatNumberGenerator : SeatNumberGenerator)
 
-    + GetSeats() : List<Seat>
+    + GetRowCount() : int
+    + GetColumnCount() : int
+    + GetSeats() : List<ISeat>
 
     + GetAvailableSeatsCount() : int
-    + AllocateSeats(number : int) : boolean
+    + AllocateSeats(number : int) : List<ISeat>
+}
+
+interface ISeat {
+    + GetStatus() : Status
+    + GetSeatNumber() : string
+    + Allocate() : void
 }
 
 class Seat {
@@ -20,7 +46,6 @@ class Seat {
 
     + GetStatus() : Status
     + GetSeatNumber() : string
-
     + Allocate() : void
 }
 
@@ -29,7 +54,16 @@ Enum Status {
     Allocated
 }
 
-Theatre o-- Seat
-Seat o-- Status
+TheatrePrinter --> Theatre
+TheatrePrinter ---> ISeat
+
+Theatre o-- ISeat
+Theatre --> ISeatNumberGenerator
+
+ISeatNumberGenerator <|.. SeatNumberGenerator
+
+ISeat --> Status
+
+ISeat <|-- Seat
 
 @enduml

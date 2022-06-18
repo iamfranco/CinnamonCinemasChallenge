@@ -1,66 +1,86 @@
 ﻿using CinnamonCinemas.Models;
+using CinnamonCinemas.Models.SeatNumberGenerators;
 using System.Collections.ObjectModel;
 
 namespace CinnamonCinemas.Tests.Models;
 internal class TheatreTests
 {
     Theatre theatre;
-    List<string> rowLetters;
-    List<int> columnNumbers;
+    int rowCount;
+    int columnCount;
+    SeatNumberGenerator seatNumberGenerator;
+
     [SetUp]
     public void Setup()
     {
-        rowLetters = new() { "A", "B", "C" };
-        columnNumbers = new() { 1, 2, 3, 4, 5 };
-        theatre = new Theatre(rowLetters, columnNumbers);
+        rowCount = 3;
+        columnCount = 5;
+        seatNumberGenerator = new SeatNumberGenerator();
+
+        theatre = new Theatre(rowCount, columnCount, seatNumberGenerator);
     }
 
     [Test]
-    public void Construct_With_Null_RowLetters_Should_Throw_Exception()
+    public void Construct_With_RowCount_Below_Or_Equal_Zero_Should_Throw_Exception()
     {
-        rowLetters = null;
+        Action act;
 
-        Action act = () => theatre = new Theatre(rowLetters, columnNumbers);
+        act = () => theatre = new Theatre(0, columnCount, seatNumberGenerator);
+        act.Should().Throw<ArgumentOutOfRangeException>();
+
+        act = () => theatre = new Theatre(-2, columnCount, seatNumberGenerator);
+        act.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [Test]
+    public void Construct_With_ColumnCount_Below_Or_Equal_Zero_Should_Throw_Exception()
+    {
+        Action act;
+
+        act = () => theatre = new Theatre(rowCount, 0, seatNumberGenerator);
+        act.Should().Throw<ArgumentOutOfRangeException>();
+
+        act = () => theatre = new Theatre(rowCount, -1, seatNumberGenerator);
+        act.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [Test]
+    public void Construct_With_seatNumberGenerator_Null_Zero_Should_Throw_Exception()
+    {
+        Action act;
+
+        act = () => theatre = new Theatre(rowCount, columnCount, null);
         act.Should().Throw<ArgumentNullException>();
     }
 
     [Test]
-    public void Construct_With_Empty_RowLetters_Should_Throw_Exception()
+    public void RowCount_Should_Return_Constructor_RowCount()
     {
-        rowLetters = new() { };
+        int expectedResult = 3;
+        int actualResult = theatre.RowCount;
 
-        Action act = () => theatre = new Theatre(rowLetters, columnNumbers);
-        act.Should().Throw<ArgumentException>();
+        actualResult.Should().Be(expectedResult);
     }
 
     [Test]
-    public void Construct_With_Null_ColumnNumbers_Should_Throw_Exception()
+    public void ColumnCount_Should_Return_Constructor_ColumnCount()
     {
-        columnNumbers = null;
+        int expectedResult = 5;
+        int actualResult = theatre.ColumnCount;
 
-        Action act = () => theatre = new Theatre(rowLetters, columnNumbers);
-        act.Should().Throw<ArgumentNullException>();
-    }
-
-    [Test]
-    public void Construct_With_Empty_ColumnNumbers_Should_Throw_Exception()
-    {
-        columnNumbers = new() { };
-
-        Action act = () => theatre = new Theatre(rowLetters, columnNumbers);
-        act.Should().Throw<ArgumentException>();
+        actualResult.Should().Be(expectedResult);
     }
 
     [Test]
     public void Seats_Should_Return_List_Of_Seats_Correspond_To_Constructor_RowLetters_ColumnNumbers_Initially()
     {
-        rowLetters = new() { "A", "B", "C" };
-        columnNumbers = new() { 1, 2, 3, 4, 5 };
-        theatre = new Theatre(rowLetters, columnNumbers);
-
-        ReadOnlyCollection<Seat> expectedResult = rowLetters.SelectMany(
-            _ => columnNumbers,
-            (row, column) => new Seat($"{row}{column}")).ToList().AsReadOnly();
+        ReadOnlyCollection<Seat> expectedResult = new List<string>()
+        {
+            "A1", "A2", "A3", "A4", "A5",
+            "B1", "B2", "B3", "B4", "B5",
+            "C1", "C2", "C3", "C4", "C5",
+        }.Select(seatNumber => new Seat(seatNumber))
+        .ToList().AsReadOnly();
 
         ReadOnlyCollection<Seat> actualResult = theatre.Seats;
 
@@ -70,14 +90,19 @@ internal class TheatreTests
     [Test]
     public void GetAvailableSeatsCount_Should_Return_Total_Number_Of_Seats_Initially()
     {
-        rowLetters = new() { "A", "B", "C" };
-        columnNumbers = new() { 1, 2, 3, 4, 5 };
-        theatre = new Theatre(rowLetters, columnNumbers);
-
         int expectedResult = 15;
         int actualResult = theatre.GetAvailableSeatsCount();
 
         actualResult.Should().Be(expectedResult);
+    }
+
+    [Test]
+    public void AllocateSeats_With_3_Should_Return_List_Of_3_Allocated_Seats()
+    {
+        ReadOnlyCollection<Seat>? allocatedSeats = theatre.AllocateSeats(3);
+        ReadOnlyCollection<Seat> expectedSeats = theatre.Seats.Take(3).ToList().AsReadOnly();
+
+        allocatedSeats.Should().BeEquivalentTo(expectedSeats);
     }
 
     [Test]
@@ -89,6 +114,17 @@ internal class TheatreTests
         int actualResult = theatre.GetAvailableSeatsCount();
 
         actualResult.Should().Be(expectedResult);
+    }
+
+    [Test]
+    public void AllocateSeats_With_3_2_Should_Return_List_Of_Recent_2_Allocated_Seats()
+    {
+        theatre.AllocateSeats(3);
+
+        ReadOnlyCollection<Seat>? allocatedSeats = theatre.AllocateSeats(2);
+        ReadOnlyCollection<Seat> expectedSeats = theatre.Seats.Skip(3).Take(2).ToList().AsReadOnly();
+
+        allocatedSeats.Should().BeEquivalentTo(expectedSeats);
     }
 
     [Test]
@@ -105,22 +141,20 @@ internal class TheatreTests
     }
 
     [Test]
-    public void AllocateSeats_With_15_1_Should_Throw_Exception()
+    public void AllocateSeats_With_15_1_Should_Return_Null()
     {
         theatre.AllocateSeats(15);
 
-        Action act = () => theatre.AllocateSeats(1);
-
-        act.Should().Throw<ArgumentOutOfRangeException>();
+        var allocatedSeats = theatre.AllocateSeats(1);
+        allocatedSeats.Should().BeNull();
     }
 
     [Test]
-    public void AllocateSeats_With_14_2_Should_Throw_Exception()
+    public void AllocateSeats_With_14_2_Should_Return_Null()
     {
         theatre.AllocateSeats(14);
 
-        Action act = () => theatre.AllocateSeats(2);
-
-        act.Should().Throw<ArgumentOutOfRangeException>();
+        var allocatedSeats = theatre.AllocateSeats(2);
+        allocatedSeats.Should().BeNull();
     }
 }

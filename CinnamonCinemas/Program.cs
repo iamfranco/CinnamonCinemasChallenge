@@ -4,7 +4,11 @@ using CinnamonCinemas.Models.SeatNumberGenerators;
 using Spectre.Console;
 
 ISeatNumberGenerator seatNumberGenerator = new SeatNumberGenerator();
-Theatre theatre = new Theatre(rowCount: 3, columnCount: 5, seatNumberGenerator);
+Theatre theatre = new Theatre(
+    rowCount: 3, 
+    columnCount: 5, 
+    theatreInfo: "Doctor Strange in the Multiverse of Madness, Theatre 1, 22:30 18th June 2022",
+    seatNumberGenerator);
 TheatrePrinter theatrePrinter = new TheatrePrinter();
 
 theatrePrinter.Print(theatre);

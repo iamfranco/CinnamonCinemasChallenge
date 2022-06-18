@@ -10,14 +10,18 @@ public class Theatre
 
     public int RowCount { get; }
     public int ColumnCount { get; }
+    public string TheatreInfo { get; }
 
-    public Theatre(int rowCount, int columnCount, ISeatNumberGenerator seatNumberGenerator)
+    public Theatre(int rowCount, int columnCount, string theatreInfo, ISeatNumberGenerator seatNumberGenerator)
     {
         if (rowCount <= 0)
             throw new ArgumentOutOfRangeException(nameof(rowCount));
 
         if (columnCount <= 0)
             throw new ArgumentOutOfRangeException(nameof(columnCount));
+
+        if (theatreInfo is null)
+            throw new ArgumentNullException(nameof(theatreInfo));
 
         if (seatNumberGenerator is null)
             throw new ArgumentNullException(nameof(seatNumberGenerator));
@@ -35,6 +39,7 @@ public class Theatre
 
         RowCount = rowCount;
         ColumnCount = columnCount;
+        TheatreInfo = theatreInfo;
     }
 
     public int GetAvailableSeatsCount() => _seats.Count(seat => seat.Status is SeatStatus.Available);

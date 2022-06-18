@@ -1,8 +1,8 @@
 ﻿using CinnamonCinemas.Models;
+using CinnamonCinemas.Models.SeatNumberGenerators;
 
-List<string> rowLetters = new() { "A", "B", "C" };
-List<int> columnNumbers = new() { 1, 2, 3, 4, 5 };
-Theatre theatre = new Theatre(rowLetters, columnNumbers);
+SeatNumberGenerator seatNumberGenerator = new SeatNumberGenerator();
+Theatre theatre = new Theatre(rowCount: 3, columnCount: 5, seatNumberGenerator);
 
 while (true)
 {

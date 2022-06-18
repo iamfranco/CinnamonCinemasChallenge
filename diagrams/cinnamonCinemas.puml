@@ -3,6 +3,7 @@ skinparam ClassAttributeIconSize 0
 
 class TheatrePrinter {
     + Print(theatre : Theatre) : void
+    + Print(theatre : Theatre, recentlyAllocatedSeats : List<ISeat>) : void
 }
 
 interface ISeatNumberGenerator {
@@ -54,6 +55,8 @@ Enum Status {
 }
 
 TheatrePrinter --> Theatre
+TheatrePrinter ---> ISeat
+
 Theatre o-- ISeat
 Theatre --> ISeatNumberGenerator
 

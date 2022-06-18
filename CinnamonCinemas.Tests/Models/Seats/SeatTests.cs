@@ -1,6 +1,6 @@
-﻿using CinnamonCinemas.Models;
+﻿using CinnamonCinemas.Models.Seats;
 
-namespace CinnamonCinemas.Tests.Models;
+namespace CinnamonCinemas.Tests.Models.Seats;
 internal class SeatTests
 {
     Seat seat;

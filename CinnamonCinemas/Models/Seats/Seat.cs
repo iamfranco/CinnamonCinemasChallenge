@@ -1,4 +1,4 @@
-﻿namespace CinnamonCinemas.Models;
+﻿namespace CinnamonCinemas.Models.Seats;
 public class Seat
 {
     public string SeatNumber { get; }
@@ -9,7 +9,7 @@ public class Seat
         if (seatNumber is null)
             throw new ArgumentNullException(nameof(seatNumber));
 
-        if (seatNumber == String.Empty)
+        if (seatNumber == string.Empty)
             throw new ArgumentException($"{nameof(seatNumber)} cannot be empty string");
 
         SeatNumber = seatNumber;

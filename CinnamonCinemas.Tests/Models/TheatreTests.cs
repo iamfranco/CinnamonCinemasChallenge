@@ -1,5 +1,6 @@
 ﻿using CinnamonCinemas.Models;
 using CinnamonCinemas.Models.SeatNumberGenerators;
+using CinnamonCinemas.Models.Seats;
 using System.Collections.ObjectModel;
 
 namespace CinnamonCinemas.Tests.Models;

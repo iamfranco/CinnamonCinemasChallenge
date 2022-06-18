@@ -1,4 +1,4 @@
-﻿namespace CinnamonCinemas.Models;
+﻿namespace CinnamonCinemas.Models.Seats;
 public enum Status
 {
     Available,

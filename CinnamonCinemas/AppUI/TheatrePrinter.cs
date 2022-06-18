@@ -1,4 +1,5 @@
 ﻿using CinnamonCinemas.Models;
+using CinnamonCinemas.Models.Seats;
 using Spectre.Console;
 using System.Collections.ObjectModel;
 
@@ -24,7 +25,7 @@ public class TheatrePrinter
                 Seat seat = seats.Dequeue();
                 string seatNumber = seat.SeatNumber;
 
-                if (seat.Status is Models.Status.Allocated)
+                if (seat.Status is Models.Seats.Status.Allocated)
                     seatNumber = $"[red]{seat.SeatNumber}[/]";
 
                 if (recentlyAllocatedSeats.Contains(seat))

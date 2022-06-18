@@ -22,7 +22,7 @@ class Theatre {
     + Theatre(\n\
         rowCount : int, \n\
         columnCount : int, \n\
-        seatNumberGenerator : SeatNumberGenerator)
+        seatNumberGenerator : ISeatNumberGenerator)
 
     + GetRowCount() : int
     + GetColumnCount() : int

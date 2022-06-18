@@ -54,6 +54,24 @@ internal class TheatreTests
     }
 
     [Test]
+    public void RowCount_Should_Return_Constructor_RowCount()
+    {
+        int expectedResult = 3;
+        int actualResult = theatre.RowCount;
+
+        actualResult.Should().Be(expectedResult);
+    }
+
+    [Test]
+    public void ColumnCount_Should_Return_Constructor_ColumnCount()
+    {
+        int expectedResult = 5;
+        int actualResult = theatre.ColumnCount;
+
+        actualResult.Should().Be(expectedResult);
+    }
+
+    [Test]
     public void Seats_Should_Return_List_Of_Seats_Correspond_To_Constructor_RowLetters_ColumnNumbers_Initially()
     {
         ReadOnlyCollection<Seat> expectedResult = new List<string>()

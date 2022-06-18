@@ -7,6 +7,9 @@ public class Theatre
     private List<Seat> _seats;
     public ReadOnlyCollection<Seat> Seats => _seats.AsReadOnly();
 
+    public int RowCount { get; }
+    public int ColumnCount { get; }
+
     public Theatre(int rowCount, int columnCount, SeatNumberGenerator seatNumberGenerator)
     {
         if (rowCount <= 0)
@@ -28,6 +31,9 @@ public class Theatre
                 _seats.Add(new Seat(seatNumber));
             }
         }
+
+        RowCount = rowCount;
+        ColumnCount = columnCount;
     }
 
     public int GetAvailableSeatsCount() => _seats.Count(seat => seat.Status is Status.Available);

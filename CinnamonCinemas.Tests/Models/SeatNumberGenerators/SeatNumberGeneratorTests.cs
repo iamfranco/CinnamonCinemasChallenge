@@ -3,11 +3,11 @@
 namespace CinnamonCinemas.Tests.Models.SeatNumberGenerators;
 internal class SeatNumberGeneratorTests
 {
-    SeatNumberGenerator seatNumberGenerator;
+    ISeatNumberGenerator seatNumberGenerator;
     [SetUp]
     public void Setup()
     {
-        seatNumberGenerator = new();
+        seatNumberGenerator = new SeatNumberGenerator();
     }
 
     [Test]

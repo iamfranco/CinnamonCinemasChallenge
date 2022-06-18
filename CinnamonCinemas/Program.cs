@@ -3,7 +3,7 @@ using CinnamonCinemas.Models;
 using CinnamonCinemas.Models.SeatNumberGenerators;
 using Spectre.Console;
 
-SeatNumberGenerator seatNumberGenerator = new SeatNumberGenerator();
+ISeatNumberGenerator seatNumberGenerator = new SeatNumberGenerator();
 Theatre theatre = new Theatre(rowCount: 3, columnCount: 5, seatNumberGenerator);
 TheatrePrinter theatrePrinter = new TheatrePrinter();
 

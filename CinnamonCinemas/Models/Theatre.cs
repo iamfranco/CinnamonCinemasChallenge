@@ -11,7 +11,7 @@ public class Theatre
     public int RowCount { get; }
     public int ColumnCount { get; }
 
-    public Theatre(int rowCount, int columnCount, SeatNumberGenerator seatNumberGenerator)
+    public Theatre(int rowCount, int columnCount, ISeatNumberGenerator seatNumberGenerator)
     {
         if (rowCount <= 0)
             throw new ArgumentOutOfRangeException(nameof(rowCount));

@@ -40,6 +40,7 @@ class CinemasController {
 class Theatre {
     - rowCount : int
     - columnCount : int
+    - theatreInfo : string
     - seats : List<Seat>
 
     + Theatre(\n\
@@ -50,6 +51,7 @@ class Theatre {
 
     + GetRowCount() : int
     + GetColumnCount() : int
+    + GetTheatreInfo() : string
     + GetSeats() : List<Seat>
 
     + GetAvailableSeatsCount() : int

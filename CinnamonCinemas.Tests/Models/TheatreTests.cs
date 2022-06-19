@@ -9,6 +9,7 @@ internal class TheatreTests
     Theatre theatre;
     int rowCount;
     int columnCount;
+    string theatreInfo;
     ISeatNumberGenerator seatNumberGenerator;
 
     [SetUp]
@@ -16,9 +17,10 @@ internal class TheatreTests
     {
         rowCount = 3;
         columnCount = 5;
+        theatreInfo = "Doctor Strange in the Multiverse of Madness, Theatre 1, 22:30 18th June 2022";
         seatNumberGenerator = new SeatNumberGenerator();
 
-        theatre = new Theatre(rowCount, columnCount, seatNumberGenerator);
+        theatre = new Theatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
     }
 
     [Test]
@@ -26,10 +28,10 @@ internal class TheatreTests
     {
         Action act;
 
-        act = () => theatre = new Theatre(0, columnCount, seatNumberGenerator);
+        act = () => theatre = new Theatre(0, columnCount, theatreInfo, seatNumberGenerator);
         act.Should().Throw<ArgumentOutOfRangeException>();
 
-        act = () => theatre = new Theatre(-2, columnCount, seatNumberGenerator);
+        act = () => theatre = new Theatre(-2, columnCount, theatreInfo, seatNumberGenerator);
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
@@ -38,19 +40,28 @@ internal class TheatreTests
     {
         Action act;
 
-        act = () => theatre = new Theatre(rowCount, 0, seatNumberGenerator);
+        act = () => theatre = new Theatre(rowCount, 0, theatreInfo, seatNumberGenerator);
         act.Should().Throw<ArgumentOutOfRangeException>();
 
-        act = () => theatre = new Theatre(rowCount, -1, seatNumberGenerator);
+        act = () => theatre = new Theatre(rowCount, -1, theatreInfo, seatNumberGenerator);
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [Test]
-    public void Construct_With_seatNumberGenerator_Null_Zero_Should_Throw_Exception()
+    public void Construct_With_TheatreInfo_Null_Should_Throw_Exception()
     {
         Action act;
 
-        act = () => theatre = new Theatre(rowCount, columnCount, null);
+        act = () => theatre = new Theatre(rowCount, columnCount, null, seatNumberGenerator);
+        act.Should().Throw<ArgumentNullException>();
+    }
+
+    [Test]
+    public void Construct_With_seatNumberGenerator_Null_Should_Throw_Exception()
+    {
+        Action act;
+
+        act = () => theatre = new Theatre(rowCount, columnCount, theatreInfo, null);
         act.Should().Throw<ArgumentNullException>();
     }
 
@@ -68,6 +79,15 @@ internal class TheatreTests
     {
         int expectedResult = 5;
         int actualResult = theatre.ColumnCount;
+
+        actualResult.Should().Be(expectedResult);
+    }
+
+    [Test]
+    public void TheatreInfo_Should_Return_Constructor_TheatreInfo()
+    {
+        string expectedResult = theatreInfo;
+        string actualResult = theatre.TheatreInfo;
 
         actualResult.Should().Be(expectedResult);
     }

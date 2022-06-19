@@ -3,7 +3,11 @@ skinparam ClassAttributeIconSize 0
 
 class TheatrePrinter {
     + Print(theatre : Theatre) : void
-    + Print(theatre : Theatre, recentlyAllocatedSeats : List<Seat>) : void
+    
+    + Print(\n\
+        theatre : Theatre, \n\
+        recentlyAllocatedSeats : List<Seat>\n\
+    ) : void
 }
 
 interface ISeatNumberGenerator {
@@ -14,18 +18,44 @@ class SeatNumberGenerator {
     + GenerateSeatNumber(rowNumber : int, columnNumber : int) : string
 }
 
+class CinemasController {
+    - theatres : List<Theatre>
+    - selectedTheatre : Theatre
+    - recentlyAllocatedSeats : List<Seat>
+
+    + GetTheatres() : List<Theatre>
+    + GetSelectedTheatre() : Theatre
+    + GetRecentlyAllocatedSeats() : List<Seat>
+
+    + AddTheatre(\n\
+        rowCount : int, \n\
+        columnCount : int, \n\
+        theatreInfo : string, \n\
+        seatNumberGenerator : ISeatNumberGenerator\n\
+    ) : void
+
+    + SelectTheatre(theatre : Theatre) : void
+
+    + AllocateSeatsOnSelectedTheatre(number : int) : void
+
+    + DeleteTheatre(theatre : Theatre) : void
+}
+
 class Theatre {
     - rowCount : int
     - columnCount : int
+    - theatreInfo : string
     - seats : List<Seat>
 
     + Theatre(\n\
         rowCount : int, \n\
         columnCount : int, \n\
+        theatreInfo : string, \n\
         seatNumberGenerator : ISeatNumberGenerator)
 
     + GetRowCount() : int
     + GetColumnCount() : int
+    + GetTheatreInfo() : string
     + GetSeats() : List<Seat>
 
     + GetAvailableSeatsCount() : int
@@ -48,13 +78,17 @@ Enum SeatStatus {
     Allocated
 }
 
+CinemasController o-- Theatre
+CinemasController o--- Seat
+CinemasController --u-> ISeatNumberGenerator
+
 TheatrePrinter --> Theatre
 TheatrePrinter ---> Seat
 
 Theatre o-- Seat
-Theatre --> ISeatNumberGenerator
+Theatre --u-> ISeatNumberGenerator
 
-ISeatNumberGenerator <|.. SeatNumberGenerator
+ISeatNumberGenerator <|.u. SeatNumberGenerator
 
 Seat o-- SeatStatus
 

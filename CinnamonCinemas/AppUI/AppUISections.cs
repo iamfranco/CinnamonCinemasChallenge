@@ -100,6 +100,13 @@ public class AppUISections
 
     public void AllocateSeat()
     {
+        if (_cinemasController.SelectedTheatre!.GetAvailableSeatsCount() == 0)
+        {
+            Console.WriteLine("Theatre already fully allocated, no seats available. \nPress Enter to continue...");
+            Console.ReadLine();
+            ActionOnSelectedTheatre();
+        }
+
         int numberOfSeatsInput = AnsiConsole.Prompt(
             new TextPrompt<int>($"Enter [blue]number of seats[/] to allocate (between 1 or 3): ")
                 .ValidationErrorMessage($"[red]Number of seats[/] must be [blue]between 1 or 3[/].\n")

@@ -17,13 +17,25 @@ internal class SeatNumberGeneratorTests
     }
 
     [Test]
-    public void GenerateSeatNumber_With_3_2_Should_Return_A1()
+    public void GenerateSeatNumber_With_3_2_Should_Return_C2()
     {
         seatNumberGenerator.GenerateSeatNumber(3, 2).Should().Be("C2");
     }
 
     [Test]
-    public void GenerateSeatNumber_With_27_3_Should_Return_A1()
+    public void GenerateSeatNumber_With_26_3_Should_Return_Z3()
+    {
+        seatNumberGenerator.GenerateSeatNumber(26, 3).Should().Be("Z3");
+    }
+
+    [Test]
+    public void GenerateSeatNumber_With_27_3_Should_Return_AA3()
+    {
+        seatNumberGenerator.GenerateSeatNumber(27, 3).Should().Be("AA3");
+    }
+
+    [Test]
+    public void GenerateSeatNumber_With_28_3_Should_Return_AB3()
     {
         seatNumberGenerator.GenerateSeatNumber(28, 3).Should().Be("AB3");
     }

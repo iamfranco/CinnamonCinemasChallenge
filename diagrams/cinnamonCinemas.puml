@@ -1,7 +1,22 @@
 @startuml "cinnamon cinemas"
 skinparam ClassAttributeIconSize 0
 
-class TheatrePrinter {
+class AppUISections {
+    - cinemasController : CinemasController,
+    - theatrePrinter : ITheatrePrinter,
+
+    + AppUISections( \n\
+        cinemasController : CinemasController, \n\
+        theatrePrinter : ITheatrePrinter, \n\
+    )
+
+    + SelectTheatre() : void
+    + ActionOnSelectedTheatre() : void
+    + AllocateSeat() : void
+    + DeleteTheatre() : void
+}
+
+interface ITheatrePrinter <<interface>> {
     + Print(theatre : Theatre) : void
     
     + Print(\n\
@@ -10,18 +25,29 @@ class TheatrePrinter {
     ) : void
 }
 
-interface ISeatNumberGenerator {
-    + GenerateSeatNumber(rowNumber : int, columnNumber : int) : string
+class TheatrePrinter {
+}
+
+interface ISeatNumberGenerator <<interface>> {
+    + GenerateSeatNumber(\n\
+        rowNumber : int, \n\
+        columnNumber : int \n\
+    ) : string
 }
 
 class SeatNumberGenerator {
-    + GenerateSeatNumber(rowNumber : int, columnNumber : int) : string
 }
 
 class CinemasController {
+    - seatNumberGenerator : ISeatNumberGenerator
+
     - theatres : List<Theatre>
     - selectedTheatre : Theatre
     - recentlyAllocatedSeats : List<Seat>
+
+    + CinemasController(\n\
+        seatNumberGenerator: ISeatNumberGenerator\n\
+    )
 
     + GetTheatres() : List<Theatre>
     + GetSelectedTheatre() : Theatre
@@ -31,7 +57,6 @@ class CinemasController {
         rowCount : int, \n\
         columnCount : int, \n\
         theatreInfo : string, \n\
-        seatNumberGenerator : ISeatNumberGenerator\n\
     ) : void
 
     + SelectTheatre(theatre : Theatre) : void
@@ -78,18 +103,23 @@ Enum SeatStatus {
     Allocated
 }
 
+AppUISections o-- CinemasController
+AppUISections o-- ITheatrePrinter
+
 CinemasController o-- Theatre
 CinemasController o--- Seat
-CinemasController --u-> ISeatNumberGenerator
+CinemasController o-- ISeatNumberGenerator
 
-TheatrePrinter --> Theatre
-TheatrePrinter ---> Seat
+ITheatrePrinter --> Theatre
+ITheatrePrinter ---> Seat
 
 Theatre o-- Seat
-Theatre --u-> ISeatNumberGenerator
+Theatre --> ISeatNumberGenerator
 
-ISeatNumberGenerator <|.u. SeatNumberGenerator
+ISeatNumberGenerator <|.. SeatNumberGenerator
 
 Seat o-- SeatStatus
+
+ITheatrePrinter <|.. TheatrePrinter
 
 @enduml

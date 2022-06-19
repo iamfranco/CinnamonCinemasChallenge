@@ -16,12 +16,12 @@ internal class CinemasControllerTests
     [SetUp]
     public void Setup()
     {
-        cinemasController = new CinemasController();
-
         rowCount = 3;
         columnCount = 5;
         theatreInfo = "Doctor Strange in the Multiverse of Madness, Theatre 1, 22:30 18th June 2022";
         seatNumberGenerator = new SeatNumberGenerator();
+
+        cinemasController = new CinemasController(seatNumberGenerator);
     }
 
     [Test]
@@ -50,8 +50,8 @@ internal class CinemasControllerTests
     [Test]
     public void AddTheatre_With_Valid_Inputs_Then_Theatres_Should_Contain_Added_Theatre()
     {
-        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
-        cinemasController.AddTheatre(4, 6, "some info", seatNumberGenerator);
+        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo);
+        cinemasController.AddTheatre(4, 6, "some info");
 
         ReadOnlyCollection<Theatre> theatres = cinemasController.Theatres;
 
@@ -65,8 +65,8 @@ internal class CinemasControllerTests
     [Test]
     public void AddTheatre_With_Valid_Inputs_Then_SelectedTheatre_Should_Return_Last_Added_Theatre()
     {
-        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
-        cinemasController.AddTheatre(4, 6, "some info", seatNumberGenerator);
+        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo);
+        cinemasController.AddTheatre(4, 6, "some info");
 
         Theatre? selectedTheatre = cinemasController.SelectedTheatre;
         selectedTheatre.Should().NotBeNull();
@@ -80,22 +80,19 @@ internal class CinemasControllerTests
     {
         Action act;
 
-        act = () => cinemasController.AddTheatre(0, columnCount, theatreInfo, seatNumberGenerator);
+        act = () => cinemasController.AddTheatre(0, columnCount, theatreInfo);
         act.Should().Throw<ArgumentOutOfRangeException>();
 
-        act = () => cinemasController.AddTheatre(-2, columnCount, theatreInfo, seatNumberGenerator);
+        act = () => cinemasController.AddTheatre(-2, columnCount, theatreInfo);
         act.Should().Throw<ArgumentOutOfRangeException>();
 
-        act = () => cinemasController.AddTheatre(rowCount, 0, theatreInfo, seatNumberGenerator);
+        act = () => cinemasController.AddTheatre(rowCount, 0, theatreInfo);
         act.Should().Throw<ArgumentOutOfRangeException>();
 
-        act = () => cinemasController.AddTheatre(rowCount, -1, theatreInfo, seatNumberGenerator);
+        act = () => cinemasController.AddTheatre(rowCount, -1, theatreInfo);
         act.Should().Throw<ArgumentOutOfRangeException>();
 
-        act = () => cinemasController.AddTheatre(rowCount, columnCount, null, seatNumberGenerator);
-        act.Should().Throw<ArgumentNullException>();
-
-        act = () => cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, null);
+        act = () => cinemasController.AddTheatre(rowCount, columnCount, null);
         act.Should().Throw<ArgumentNullException>();
     }
 
@@ -111,7 +108,7 @@ internal class CinemasControllerTests
     [Test]
     public void SelectTheatre_With_Input_Theatre_Not_In_Theatres_List_Should_Throw_Exception()
     {
-        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
+        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo);
         Theatre theatre = new(3, 3, "some info", seatNumberGenerator);
 
         Action act;
@@ -123,8 +120,8 @@ internal class CinemasControllerTests
     [Test]
     public void SelectTheatre_With_Input_Theatre_In_Theatres_Then_SelectedTheatre_Should_Return_Input_Theatre()
     {
-        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
-        cinemasController.AddTheatre(4, 6, "some info", seatNumberGenerator);
+        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo);
+        cinemasController.AddTheatre(4, 6, "some info");
 
         Theatre theatre = cinemasController.Theatres[0];
         cinemasController.SelectTheatre(theatre);
@@ -135,8 +132,8 @@ internal class CinemasControllerTests
     [Test]
     public void SelectTheatre_With_Input_Theatre_In_Theatres_Then_RecentlyAllocatedSeats_Should_Return_Empty_List_Of_Seats()
     {
-        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
-        cinemasController.AddTheatre(4, 6, "some info", seatNumberGenerator);
+        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo);
+        cinemasController.AddTheatre(4, 6, "some info");
 
         cinemasController.AllocateSeatsOnSelectedTheatre(3);
 
@@ -161,8 +158,8 @@ internal class CinemasControllerTests
     [Test]
     public void AllocateSeatsOnSelectedTheatre_Should_Allocate_Seats_On_Selected_Theatre()
     {
-        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
-        cinemasController.AddTheatre(4, 6, "some info", seatNumberGenerator);
+        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo);
+        cinemasController.AddTheatre(4, 6, "some info");
 
         cinemasController.AllocateSeatsOnSelectedTheatre(3);
         cinemasController.SelectedTheatre.GetAvailableSeatsCount().Should().Be(21);
@@ -174,8 +171,8 @@ internal class CinemasControllerTests
     [Test]
     public void AllocateSeatsOnSelectedTheatre_Successful_Then_RecentlyAllocatedSeats_Should_Return_List_Of_Recently_Allocated_Seats()
     {
-        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
-        cinemasController.AddTheatre(4, 6, "some info", seatNumberGenerator);
+        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo);
+        cinemasController.AddTheatre(4, 6, "some info");
 
         cinemasController.AllocateSeatsOnSelectedTheatre(3);
 
@@ -199,8 +196,8 @@ internal class CinemasControllerTests
     [Test]
     public void AllocateSeatsOnSelectedTheatre_On_Theatre_With_Not_Enough_Seats_Should_Throw_Exception()
     {
-        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
-        cinemasController.AddTheatre(1, 2, "some info", seatNumberGenerator);
+        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo);
+        cinemasController.AddTheatre(1, 2, "some info");
 
         Action act = () => cinemasController.AllocateSeatsOnSelectedTheatre(3);
         act.Should().Throw<InvalidOperationException>();
@@ -218,7 +215,7 @@ internal class CinemasControllerTests
     [Test]
     public void DeleteTheatre_With_Input_Theatre_Not_In_Theatres_List_Should_Throw_Exception()
     {
-        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
+        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo);
         Theatre theatre = new(3, 3, "some info", seatNumberGenerator);
 
         Action act;
@@ -230,8 +227,8 @@ internal class CinemasControllerTests
     [Test]
     public void DeleteTheatre_With_Input_Theatre_In_Theatres_List_Then_Theatres_Should_Not_Include_Deleted_Theatre()
     {
-        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
-        cinemasController.AddTheatre(4, 6, "some info", seatNumberGenerator);
+        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo);
+        cinemasController.AddTheatre(4, 6, "some info");
 
         Theatre theatre = cinemasController.Theatres[0];
         cinemasController.DeleteTheatre(theatre);
@@ -242,8 +239,8 @@ internal class CinemasControllerTests
     [Test]
     public void DeleteTheatre_With_Input_Theatre_Same_As_SelectedTheatre_Then_SelectedTheatre_Should_Be_Null()
     {
-        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
-        cinemasController.AddTheatre(4, 6, "some info", seatNumberGenerator);
+        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo);
+        cinemasController.AddTheatre(4, 6, "some info");
 
         Theatre theatre = cinemasController.Theatres[1];
         cinemasController.DeleteTheatre(theatre);
@@ -254,8 +251,8 @@ internal class CinemasControllerTests
     [Test]
     public void DeleteTheatre_With_Input_Theatre_Same_As_SelectedTheatre_Then_RecentlyAllocatedSeats_Should_Return_Empty_List_Of_Seats()
     {
-        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
-        cinemasController.AddTheatre(4, 6, "some info", seatNumberGenerator);
+        cinemasController.AddTheatre(rowCount, columnCount, theatreInfo);
+        cinemasController.AddTheatre(4, 6, "some info");
 
         cinemasController.AllocateSeatsOnSelectedTheatre(3);
 

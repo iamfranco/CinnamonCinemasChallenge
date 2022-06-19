@@ -22,6 +22,10 @@ To run the application:
 dotnet run
 ```
 
+# App Demo
+
+![App Demo](diagrams/appDemo.gif)
+
 # UML Diagram
 
 ![UML Diagram](diagrams/cinnamon%20cinemas.png)

@@ -1,4 +1,5 @@
-﻿using CinnamonCinemas.Controllers;
+﻿using CinnamonCinemas.AppUI.TheatrePrinters;
+using CinnamonCinemas.Controllers;
 using CinnamonCinemas.Models;
 using CinnamonCinemas.Models.SeatNumberGenerators;
 using Spectre.Console;
@@ -6,23 +7,17 @@ using Spectre.Console;
 namespace CinnamonCinemas.AppUI;
 public class AppUISections
 {
-    private readonly ISeatNumberGenerator _seatNumberGenerator;
     private readonly CinemasController _cinemasController;
-    private readonly TheatrePrinter _theatrePrinter;
+    private readonly ITheatrePrinter _theatrePrinter;
 
-    public AppUISections(ISeatNumberGenerator seatNumberGenerator, CinemasController cinemasController, 
-        TheatrePrinter theatrePrinter)
+    public AppUISections(CinemasController cinemasController, ITheatrePrinter theatrePrinter)
     {
-        if (seatNumberGenerator is null)
-            throw new ArgumentNullException(nameof(seatNumberGenerator));
-
         if (cinemasController is null)
             throw new ArgumentNullException(nameof(cinemasController));
 
         if (theatrePrinter is null)
             throw new ArgumentNullException(nameof(theatrePrinter));
 
-        _seatNumberGenerator = seatNumberGenerator;
         _cinemasController = cinemasController;
         _theatrePrinter = theatrePrinter;
     }
@@ -58,8 +53,7 @@ public class AppUISections
             _cinemasController.AddTheatre(
                 rowCountInput,
                 columnCountInput,
-                theatreInfoInput,
-                _seatNumberGenerator);
+                theatreInfoInput);
         }
         else
         {

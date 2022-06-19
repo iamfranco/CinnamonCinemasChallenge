@@ -21,10 +21,10 @@ public class SeatNumberGenerator : ISeatNumberGenerator
         string rowLetter = "";
         while (rowNumber > 0)
         {
-            int remainder = rowNumber % _alphabet.Length;
+            int remainder = (rowNumber - 1) % _alphabet.Length + 1;
             rowLetter = _alphabet[remainder - 1] + rowLetter;
 
-            rowNumber /= _alphabet.Length;
+            rowNumber = (rowNumber - 1) / _alphabet.Length;
         }
 
         return rowLetter;

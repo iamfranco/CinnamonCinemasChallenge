@@ -13,19 +13,10 @@ internal class AppUISectionsTests
     public void Setup()
     {
         seatNumberGenerator = new SeatNumberGenerator();
-        cinemasController = new CinemasController();
+        cinemasController = new CinemasController(seatNumberGenerator);
         theatrePrinter = new TheatrePrinter();
 
-        appUISections = new AppUISections(seatNumberGenerator, cinemasController, theatrePrinter);
-    }
-
-    [Test]
-    public void Construct_With_Null_SeatNumberGenerator_Should_Throw_Exception()
-    {
-        Action act;
-
-        act = () => appUISections = new AppUISections(null, cinemasController, theatrePrinter);
-        act.Should().Throw<ArgumentNullException>();
+        appUISections = new AppUISections(cinemasController, theatrePrinter);
     }
 
     [Test]
@@ -33,7 +24,7 @@ internal class AppUISectionsTests
     {
         Action act;
 
-        act = () => appUISections = new AppUISections(seatNumberGenerator, null, theatrePrinter);
+        act = () => appUISections = new AppUISections(null, theatrePrinter);
         act.Should().Throw<ArgumentNullException>();
     }
 
@@ -42,7 +33,7 @@ internal class AppUISectionsTests
     {
         Action act;
 
-        act = () => appUISections = new AppUISections(seatNumberGenerator, cinemasController, null);
+        act = () => appUISections = new AppUISections(cinemasController, null);
         act.Should().Throw<ArgumentNullException>();
     }
 }

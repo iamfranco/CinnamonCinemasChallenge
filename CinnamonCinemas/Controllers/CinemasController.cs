@@ -6,16 +6,23 @@ using System.Collections.ObjectModel;
 namespace CinnamonCinemas.Controllers;
 public class CinemasController
 {
-    private List<Theatre> _theatres = new List<Theatre>();
-    private List<Seat> _recentlyAllocatedSeats = new List<Seat>();
+    private ISeatNumberGenerator _seatNumberGenerator;
+    private List<Theatre> _theatres;
+    private List<Seat> _recentlyAllocatedSeats;
+    public CinemasController(ISeatNumberGenerator seatNumberGenerator)
+    {
+        _seatNumberGenerator = seatNumberGenerator;
+        _theatres = new List<Theatre>();
+        _recentlyAllocatedSeats = new List<Seat>();
+    }
 
     public Theatre? SelectedTheatre { get; private set; }
     public ReadOnlyCollection<Theatre> Theatres => _theatres.AsReadOnly();
     public ReadOnlyCollection<Seat> RecentlyAllocatedSeats => _recentlyAllocatedSeats.AsReadOnly();
 
-    public void AddTheatre(int rowCount, int columnCount, string theatreInfo, ISeatNumberGenerator seatNumberGenerator)
+    public void AddTheatre(int rowCount, int columnCount, string theatreInfo)
     {
-        Theatre theatre = new Theatre(rowCount, columnCount, theatreInfo, seatNumberGenerator);
+        Theatre theatre = new Theatre(rowCount, columnCount, theatreInfo, _seatNumberGenerator);
         _theatres.Add(theatre);
 
         SelectedTheatre = theatre;

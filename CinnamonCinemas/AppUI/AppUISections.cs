@@ -4,16 +4,34 @@ using CinnamonCinemas.Models.SeatNumberGenerators;
 using Spectre.Console;
 
 namespace CinnamonCinemas.AppUI;
-public static class AppUISections
+public class AppUISections
 {
-    public static void SelectTheatre(
-        ISeatNumberGenerator seatNumberGenerator,
-        CinemasController cinemasController,
+    private readonly ISeatNumberGenerator _seatNumberGenerator;
+    private readonly CinemasController _cinemasController;
+    private readonly TheatrePrinter _theatrePrinter;
+
+    public AppUISections(ISeatNumberGenerator seatNumberGenerator, CinemasController cinemasController, 
         TheatrePrinter theatrePrinter)
+    {
+        if (seatNumberGenerator is null)
+            throw new ArgumentNullException(nameof(seatNumberGenerator));
+
+        if (cinemasController is null)
+            throw new ArgumentNullException(nameof(cinemasController));
+
+        if (theatrePrinter is null)
+            throw new ArgumentNullException(nameof(theatrePrinter));
+
+        _seatNumberGenerator = seatNumberGenerator;
+        _cinemasController = cinemasController;
+        _theatrePrinter = theatrePrinter;
+    }
+
+    public void SelectTheatre()
     {
         Console.Clear();
 
-        var theatreInfos = cinemasController.Theatres.Select(x => x.TheatreInfo).ToList();
+        var theatreInfos = _cinemasController.Theatres.Select(x => x.TheatreInfo).ToList();
         theatreInfos.Add("<< Add New Theatre >>");
 
         string selectedTheatreInfoString = AnsiConsole.Prompt(
@@ -35,56 +53,52 @@ public static class AppUISections
                     .Validate(x => x >= 1)
                 );
 
-            string theatreInfoInput = AnsiConsole.Ask<string>("Enter Theatre Info (movie name, theatre number, play time): ");
+            string theatreInfoInput = AnsiConsole.Ask<string>("Enter Theatre Info (movie name, theatre number, start time): ");
 
-            cinemasController.AddTheatre(
+            _cinemasController.AddTheatre(
                 rowCountInput,
                 columnCountInput,
                 theatreInfoInput,
-                seatNumberGenerator);
+                _seatNumberGenerator);
         }
         else
         {
-            Theatre selectedTheatre = cinemasController.Theatres.FirstOrDefault(x => x.TheatreInfo == selectedTheatreInfoString)!;
-            cinemasController.SelectTheatre(selectedTheatre);
+            Theatre selectedTheatre = _cinemasController.Theatres.FirstOrDefault(x => x.TheatreInfo == selectedTheatreInfoString)!;
+            _cinemasController.SelectTheatre(selectedTheatre);
         }
 
-        ActionOnSelectedTheatre(seatNumberGenerator, cinemasController, theatrePrinter);
+        ActionOnSelectedTheatre();
     }
 
-    public static void ActionOnSelectedTheatre(
-        ISeatNumberGenerator seatNumberGenerator,
-        CinemasController cinemasController,
-        TheatrePrinter theatrePrinter)
+    public void ActionOnSelectedTheatre()
     {
         Console.Clear();
-        theatrePrinter.Print(cinemasController.SelectedTheatre!, cinemasController.RecentlyAllocatedSeats);
 
-        string theatreInfoString = cinemasController.SelectedTheatre!.TheatreInfo;
+        string theatreInfoString = _cinemasController.SelectedTheatre!.TheatreInfo;
+        Console.WriteLine($"Theatre [{theatreInfoString}]");
+        
+        _theatrePrinter.Print(_cinemasController.SelectedTheatre!, _cinemasController.RecentlyAllocatedSeats);
 
         string selectedTheatreInfoString = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
-                .Title($"Theatre ({theatreInfoString}) selected. \nChoose an [blue]action[/]: ")
+                .Title("Choose an [blue]action[/]: ")
                 .AddChoices(new[] {
-            "<< Allocate Seats >>",
-            "<< Select Another Theatre >>",
-            "<< Delete Current Theatre >>"
+                    "<< Allocate Seats >>",
+                    "<< Select Another Theatre >>",
+                    "<< Delete Current Theatre >>"
                 }));
 
         if (selectedTheatreInfoString == "<< Allocate Seats >>")
-            AllocateSeat(seatNumberGenerator, cinemasController, theatrePrinter);
+            AllocateSeat();
 
         if (selectedTheatreInfoString == "<< Select Another Theatre >>")
-            SelectTheatre(seatNumberGenerator, cinemasController, theatrePrinter);
+            SelectTheatre();
 
         if (selectedTheatreInfoString == "<< Delete Current Theatre >>")
-            DeleteTheatre(seatNumberGenerator, cinemasController, theatrePrinter);
+            DeleteTheatre();
     }
 
-    public static void AllocateSeat(
-        ISeatNumberGenerator seatNumberGenerator,
-        CinemasController cinemasController,
-        TheatrePrinter theatrePrinter)
+    public void AllocateSeat()
     {
         int numberOfSeatsInput = AnsiConsole.Prompt(
             new TextPrompt<int>($"Enter [blue]number of seats[/] to allocate (between 1 or 3): ")
@@ -94,7 +108,7 @@ public static class AppUISections
 
         try
         {
-            cinemasController.AllocateSeatsOnSelectedTheatre(numberOfSeatsInput);
+            _cinemasController.AllocateSeatsOnSelectedTheatre(numberOfSeatsInput);
         }
         catch (InvalidOperationException ex)
         {
@@ -103,30 +117,27 @@ public static class AppUISections
             Console.ReadLine();
         }
 
-        ActionOnSelectedTheatre(seatNumberGenerator, cinemasController, theatrePrinter);
+        ActionOnSelectedTheatre();
     }
 
-    public static void DeleteTheatre(
-        ISeatNumberGenerator seatNumberGenerator,
-        CinemasController cinemasController,
-        TheatrePrinter theatrePrinter)
+    public void DeleteTheatre()
     {
         string confirmDeletionInput = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("[blue]Delete[/] current theatre?")
                     .AddChoices(new[] {
-            "No",
-            "Yes"
+                        "No",
+                        "Yes"
                     }));
 
         if (confirmDeletionInput == "Yes")
         {
-            cinemasController.DeleteTheatre(cinemasController.SelectedTheatre!);
-            SelectTheatre(seatNumberGenerator, cinemasController, theatrePrinter);
+            _cinemasController.DeleteTheatre(_cinemasController.SelectedTheatre!);
+            SelectTheatre();
         }
         else
         {
-            ActionOnSelectedTheatre(seatNumberGenerator, cinemasController, theatrePrinter);
+            ActionOnSelectedTheatre();
         }
     }
 }

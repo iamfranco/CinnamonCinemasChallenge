@@ -4,7 +4,7 @@ using Spectre.Console;
 using System.Collections.ObjectModel;
 
 namespace CinnamonCinemas.AppUI.TheatrePrinters;
-public class TheatrePrinter
+public class TheatrePrinter : ITheatrePrinter
 {
     public void Print(Theatre theatre) => Print(theatre, new List<Seat>().AsReadOnly());
 

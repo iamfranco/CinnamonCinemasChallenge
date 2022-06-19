@@ -8,9 +8,9 @@ namespace CinnamonCinemas.AppUI;
 public class AppUISections
 {
     private readonly CinemasController _cinemasController;
-    private readonly TheatrePrinter _theatrePrinter;
+    private readonly ITheatrePrinter _theatrePrinter;
 
-    public AppUISections(CinemasController cinemasController, TheatrePrinter theatrePrinter)
+    public AppUISections(CinemasController cinemasController, ITheatrePrinter theatrePrinter)
     {
         if (cinemasController is null)
             throw new ArgumentNullException(nameof(cinemasController));

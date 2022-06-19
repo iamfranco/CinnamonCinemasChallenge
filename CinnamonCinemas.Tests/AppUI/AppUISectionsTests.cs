@@ -9,7 +9,8 @@ internal class AppUISectionsTests
     AppUISections appUISections;
     ISeatNumberGenerator seatNumberGenerator;
     CinemasController cinemasController;
-    TheatrePrinter theatrePrinter;
+    ITheatrePrinter theatrePrinter;
+
     [SetUp]
     public void Setup()
     {

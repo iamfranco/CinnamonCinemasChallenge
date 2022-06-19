@@ -5,7 +5,7 @@ using CinnamonCinemas.Models.SeatNumberGenerators;
 
 ISeatNumberGenerator seatNumberGenerator = new SeatNumberGenerator();
 CinemasController cinemasController = new CinemasController(seatNumberGenerator);
-TheatrePrinter theatrePrinter = new TheatrePrinter();
+ITheatrePrinter theatrePrinter = new TheatrePrinter();
 AppUISections appUISection = new AppUISections(cinemasController, theatrePrinter);
 
 cinemasController.AddTheatre(

@@ -2,12 +2,10 @@
 skinparam ClassAttributeIconSize 0
 
 class AppUISections {
-    - seatNumberGenerator : ISeatNumberGenerator, 
     - cinemasController : CinemasController,
     - theatrePrinter : TheatrePrinter,
 
     + AppUISections( \n\
-        seatNumberGenerator : SeatNumberGenerator, \n\
         cinemasController : CinemasController, \n\
         theatrePrinter : TheatrePrinter, \n\
     )
@@ -38,9 +36,15 @@ class SeatNumberGenerator {
 }
 
 class CinemasController {
+    - seatNumberGenerator : ISeatNumberGenerator
+
     - theatres : List<Theatre>
     - selectedTheatre : Theatre
     - recentlyAllocatedSeats : List<Seat>
+
+    + CinemasController(\n\
+        seatNumberGenerator: ISeatNumberGenerator\n\
+    )
 
     + GetTheatres() : List<Theatre>
     + GetSelectedTheatre() : Theatre
@@ -50,7 +54,6 @@ class CinemasController {
         rowCount : int, \n\
         columnCount : int, \n\
         theatreInfo : string, \n\
-        seatNumberGenerator : ISeatNumberGenerator\n\
     ) : void
 
     + SelectTheatre(theatre : Theatre) : void
@@ -97,13 +100,12 @@ Enum SeatStatus {
     Allocated
 }
 
-AppUISections --> ISeatNumberGenerator
-AppUISections --> CinemasController
-AppUISections --> TheatrePrinter
+AppUISections o-- CinemasController
+AppUISections o-- TheatrePrinter
 
 CinemasController o-- Theatre
 CinemasController o--- Seat
-CinemasController --> ISeatNumberGenerator
+CinemasController o-- ISeatNumberGenerator
 
 TheatrePrinter --> Theatre
 TheatrePrinter ---> Seat

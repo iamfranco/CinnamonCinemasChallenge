@@ -1,6 +1,23 @@
 @startuml "cinnamon cinemas"
 skinparam ClassAttributeIconSize 0
 
+class AppUISections {
+    - seatNumberGenerator : ISeatNumberGenerator, 
+    - cinemasController : CinemasController,
+    - theatrePrinter : TheatrePrinter,
+
+    + AppUISections( \n\
+        seatNumberGenerator : SeatNumberGenerator, \n\
+        cinemasController : CinemasController, \n\
+        theatrePrinter : TheatrePrinter, \n\
+    )
+
+    + SelectTheatre() : void
+    + ActionOnSelectedTheatre() : void
+    + AllocateSeat() : void
+    + DeleteTheatre() : void
+}
+
 class TheatrePrinter {
     + Print(theatre : Theatre) : void
     
@@ -11,11 +28,13 @@ class TheatrePrinter {
 }
 
 interface ISeatNumberGenerator {
-    + GenerateSeatNumber(rowNumber : int, columnNumber : int) : string
+    + GenerateSeatNumber(\n\
+        rowNumber : int, \n\
+        columnNumber : int \n\
+    ) : string
 }
 
 class SeatNumberGenerator {
-    + GenerateSeatNumber(rowNumber : int, columnNumber : int) : string
 }
 
 class CinemasController {
@@ -78,17 +97,21 @@ Enum SeatStatus {
     Allocated
 }
 
+AppUISections --> ISeatNumberGenerator
+AppUISections --> CinemasController
+AppUISections --> TheatrePrinter
+
 CinemasController o-- Theatre
 CinemasController o--- Seat
-CinemasController --u-> ISeatNumberGenerator
+CinemasController --> ISeatNumberGenerator
 
 TheatrePrinter --> Theatre
 TheatrePrinter ---> Seat
 
 Theatre o-- Seat
-Theatre --u-> ISeatNumberGenerator
+Theatre --> ISeatNumberGenerator
 
-ISeatNumberGenerator <|.u. SeatNumberGenerator
+ISeatNumberGenerator <|.. SeatNumberGenerator
 
 Seat o-- SeatStatus
 

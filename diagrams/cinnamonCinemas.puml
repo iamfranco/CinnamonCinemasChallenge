@@ -3,11 +3,11 @@ skinparam ClassAttributeIconSize 0
 
 class AppUISections {
     - cinemasController : CinemasController,
-    - theatrePrinter : TheatrePrinter,
+    - theatrePrinter : ITheatrePrinter,
 
     + AppUISections( \n\
         cinemasController : CinemasController, \n\
-        theatrePrinter : TheatrePrinter, \n\
+        theatrePrinter : ITheatrePrinter, \n\
     )
 
     + SelectTheatre() : void

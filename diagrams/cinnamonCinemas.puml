@@ -16,7 +16,7 @@ class AppUISections {
     + DeleteTheatre() : void
 }
 
-class TheatrePrinter {
+interface ITheatrePrinter <<interface>> {
     + Print(theatre : Theatre) : void
     
     + Print(\n\
@@ -25,7 +25,10 @@ class TheatrePrinter {
     ) : void
 }
 
-interface ISeatNumberGenerator {
+class TheatrePrinter {
+}
+
+interface ISeatNumberGenerator <<interface>> {
     + GenerateSeatNumber(\n\
         rowNumber : int, \n\
         columnNumber : int \n\
@@ -101,14 +104,14 @@ Enum SeatStatus {
 }
 
 AppUISections o-- CinemasController
-AppUISections o-- TheatrePrinter
+AppUISections o-- ITheatrePrinter
 
 CinemasController o-- Theatre
 CinemasController o--- Seat
 CinemasController o-- ISeatNumberGenerator
 
-TheatrePrinter --> Theatre
-TheatrePrinter ---> Seat
+ITheatrePrinter --> Theatre
+ITheatrePrinter ---> Seat
 
 Theatre o-- Seat
 Theatre --> ISeatNumberGenerator
@@ -116,5 +119,7 @@ Theatre --> ISeatNumberGenerator
 ISeatNumberGenerator <|.. SeatNumberGenerator
 
 Seat o-- SeatStatus
+
+ITheatrePrinter <|.. TheatrePrinter
 
 @enduml

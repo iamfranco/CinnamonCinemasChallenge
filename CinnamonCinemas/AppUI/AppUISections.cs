@@ -1,4 +1,5 @@
-﻿using CinnamonCinemas.Controllers;
+﻿using CinnamonCinemas.AppUI.TheatrePrinters;
+using CinnamonCinemas.Controllers;
 using CinnamonCinemas.Models;
 using CinnamonCinemas.Models.SeatNumberGenerators;
 using Spectre.Console;

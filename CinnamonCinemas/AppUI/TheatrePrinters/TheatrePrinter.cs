@@ -3,7 +3,7 @@ using CinnamonCinemas.Models.Seats;
 using Spectre.Console;
 using System.Collections.ObjectModel;
 
-namespace CinnamonCinemas.AppUI;
+namespace CinnamonCinemas.AppUI.TheatrePrinters;
 public class TheatrePrinter
 {
     public void Print(Theatre theatre) => Print(theatre, new List<Seat>().AsReadOnly());

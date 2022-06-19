@@ -1,4 +1,5 @@
 ﻿using CinnamonCinemas.AppUI;
+using CinnamonCinemas.AppUI.TheatrePrinters;
 using CinnamonCinemas.Controllers;
 using CinnamonCinemas.Models.SeatNumberGenerators;
 
